@@ -21,18 +21,22 @@ def require_auth(f):
         auth = request.authorization
 
         if not (auth) or not check_auth(auth.username, auth.password):
-            return "Unauthorized", 401, {'WWW-Authenticate': 'Basic realm="Login Required"'}
+            return (
+                "Unauthorized",
+                401,
+                {"WWW-Authenticate": 'Basic realm="Login Required"'},
+            )
 
         return f(*args, **kwargs)
 
     return decorated
 
 
-@app.route('/api/data', methods=['GET'])
+@app.route("/api/data", methods=["GET"])
 @require_auth
 def get_data():
     return jsonify({"message": "Protected data"})
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run(debug=True)
